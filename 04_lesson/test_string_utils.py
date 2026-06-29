@@ -39,7 +39,7 @@ def test_capitalize_negative(input_str, expected):
     ids=["leading_spaces", "no_spaces", "inside_spaces", "trailing_spaces", "mixed_spaces"]
 )
 def test_trim_positive(input_string, expected_string):
-    processor = StringProcessor()
+    processor = StringUtils()
     assert processor.trim(input_string) == expected_string
     
 @pytest.mark.parametrize(
@@ -53,28 +53,20 @@ def test_trim_positive(input_string, expected_string):
     ids=["int_type", "none_type", "list_type", "dict_type"]
 )
 def test_trim_negative_wrong_types(invalid_input):
-    processor = StringProcessor()
+    processor = StringUtils()
     with pytest.raises(TypeError):
         processor.trim(invalid_input)
         
-def contains(string: str, symbol: str) -> bool:
-    res = False
-    try:
-        res = string.index(symbol) > -1
-    except ValueError:
-        pass
-    return res
-
 positive_cases = [
     ("SkyPro", "S"),  
     ("SkyPro", "o"),  
     ("SkyPro", "y"),  
     ("S", "S"),       
-
+]
 @pytest.mark.parametrize("string, symbol", positive_cases)
 def test_contains_positive(string, symbol):
     """Тест проверяет успешное нахождение символа в разных позициях строки."""
-    assert contains(string, symbol) is True
+    assert string_utils.contains(string, symbol) is True
 
 negative_cases = [
     ("SkyPro", "U"),  
@@ -85,23 +77,20 @@ negative_cases = [
 @pytest.mark.parametrize("string, symbol", negative_cases)
 def test_contains_negative(string, symbol):
     """Тест проверяет корректный возврат False при отсутствии совпадений."""
-    assert contains(string, symbol) is False 
+    assert string_utils.contains(string, symbol) is False 
     
 def delete_symbol(self, string: str, symbol: str) -> str:
         if symbol and symbol in string:
             string = string.replace(symbol, '')
         return string
 
-class TestStringProcessor:
-    
-    processor = StringProcessor()
 
 @pytest.mark.parametrize("string, symbol, expected_result", [
         ("SkyPro", "k", "SyPro"),         
         ("Пример с пробелами", " ", "Примерспробелами"), 
     ])
-def test_delete_symbol_positive(self, string, symbol, expected_result):
-        assert self.processor.delete_symbol(string, symbol) == expected_result
+def test_delete_symbol_positive(string, symbol, expected_result):
+        assert string_utils.delete_symbol(string, symbol) == expected_result
 
 @pytest.mark.parametrize("string, symbol", [
         ("SkyPro", "z"),                 
@@ -109,6 +98,6 @@ def test_delete_symbol_positive(self, string, symbol, expected_result):
         ("", "k"),                      
         ("SkyPro", ""),                  
     ])
-def test_delete_symbol_negative(self, string, symbol):
+def test_delete_symbol_negative(string, symbol):
         original_string = string
-        assert self.processor.delete_symbol(string, symbol) == original_string   
+        assert string_utils.delete_symbol(string, symbol) == original_string   
